@@ -6,6 +6,10 @@ var logger = require('morgan');
 
 let app = express();
 
+let bodyParser = require('body-parser');
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended:true}));
+
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 require("./routes/songs.js")(app);
@@ -18,6 +22,7 @@ app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
+// declare public folder as static
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);

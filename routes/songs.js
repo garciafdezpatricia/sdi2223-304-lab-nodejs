@@ -1,5 +1,13 @@
 module.exports = function (app) {
 
+    // PETICION GET
+    app.get('/promo*', function (req, res) {
+        res.send('Respuesta al patrón promo*');
+    });
+    app.get('/pro*ar', function (req, res) {
+        res.send('Respuesta al patrón pro*ar');
+    });
+
     // **** PARAMETROS EN URL CON ? CLAVE=VALOR ****
     app.get("/songs", function(req, res) {
         let response = "";
@@ -28,4 +36,12 @@ module.exports = function (app) {
             + 'Tipo de música: ' + req.params.kind;
         res.send(response);
     });
+
+
+    // PETICION POST
+    app.post('/songs/add', function(req, res){
+        let response = "Canción agregada: " + req.body.title + "<br>" +
+            " género: " + req.body.kind + "<br>" + " precio: " + req.body.price;
+        res.send(response);
+    })
 }
