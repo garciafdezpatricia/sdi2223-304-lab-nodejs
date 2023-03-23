@@ -10,21 +10,41 @@ module.exports = function (app) {
 
     // **** PARAMETROS EN URL CON ? CLAVE=VALOR ****
     app.get("/songs", function(req, res) {
-        let response = "";
-        // check if the title is defined
-        if (req.query.title != null && typeof (req.query.title) != "undefined")
-            response = 'Título: ' + req.query.title + '<br>';
-        // check if the author is defined
-        if (req.query.author != null && typeof (req.query.author) != "undefined")
-            response += 'Autor: ' + req.query.author;
+        // let response = "";
+        // // check if the title is defined
+        // if (req.query.title != null && typeof (req.query.title) != "undefined")
+        //     response = 'Título: ' + req.query.title + '<br>';
+        // // check if the author is defined
+        // if (req.query.author != null && typeof (req.query.author) != "undefined")
+        //     response += 'Autor: ' + req.query.author;
 
-        res.send(response);
+        let songs = [{
+            "title":"Blank Space",
+            "price":"1.12"
+        }, {
+            "title":"See you again",
+            "price":"1.3"
+        },{
+            "title":"Uptown Funk",
+            "price":"1.1"
+        }];
+        let response = {
+            seller : "Tienda de canciones",
+            songs : songs
+        };
+
+        res.render("shop.twig", response);
     })
 
     app.get('/add', function(req, res) {
         let response = parseInt(req.query.num1) + parseInt(req.query.num2);
         res.send(String(response));
     })
+
+    // *** DEVUELVE FORMULARIO PARA AÑADIR NUEVAS CANCIONES ***
+    app.get('/songs/add', function (req, res) {
+        res.render("add.twig");
+    });
 
     // **** PARAMETROS EN URL CON /VALOR ****
     app.get('/songs/:id', function(req, res) {

@@ -6,6 +6,7 @@ var logger = require('morgan');
 
 let app = express();
 
+
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
@@ -14,9 +15,9 @@ let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
 require("./routes/songs.js")(app);
 
-// view engine setup
+// view engine setup: incluido el modulo twig en el fichero app.js
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'jade');
+app.set('view engine', 'twig');
 
 app.use(logger('dev'));
 app.use(express.json());
