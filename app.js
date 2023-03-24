@@ -6,15 +6,19 @@ var logger = require('morgan');
 
 let app = express();
 
-
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
-require("./routes/songs.js")(app); // controlador para canciones
 require("./routes/authors.js")(app); // controlador para autores
+
+const { MongoClient } = require("mongodb"); // para poder acceder a mongo
+// url de conexion
+const url = 'mongodb+srv://admin:PL0G7I6cEIC1smJC@musicstoreapp.bflh7ay.mongodb.net/?retryWrites=true&w=majority';
+app.set('connectionStrings', url); // almacenar cadena de conexion
+require("./routes/songs.js")(app, MongoClient);
 
 // view engine setup: incluido el modulo twig en el fichero app.js
 app.set('views', path.join(__dirname, 'views'));

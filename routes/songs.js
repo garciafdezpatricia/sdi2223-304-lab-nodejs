@@ -1,23 +1,9 @@
-module.exports = function (app) {
+module.exports = function (app, MongoClient) {
 
     // PETICION GET
-    app.get('/promo*', function (req, res) {
-        res.send('Respuesta al patrón promo*');
-    });
-    app.get('/pro*ar', function (req, res) {
-        res.send('Respuesta al patrón pro*ar');
-    });
 
     // **** PARAMETROS EN URL CON ? CLAVE=VALOR ****
     app.get("/songs", function(req, res) {
-        // let response = "";
-        // // check if the title is defined
-        // if (req.query.title != null && typeof (req.query.title) != "undefined")
-        //     response = 'Título: ' + req.query.title + '<br>';
-        // // check if the author is defined
-        // if (req.query.author != null && typeof (req.query.author) != "undefined")
-        //     response += 'Autor: ' + req.query.author;
-
         let songs = [{
             "title":"Blank Space",
             "price":"1.12"
@@ -36,15 +22,32 @@ module.exports = function (app) {
         res.render("shop.twig", response);
     })
 
-    app.get('/add', function(req, res) {
-        let response = parseInt(req.query.num1) + parseInt(req.query.num2);
-        res.send(String(response));
-    })
-
     // *** DEVUELVE FORMULARIO PARA AÑADIR NUEVAS CANCIONES ***
     app.get('/songs/add', function (req, res) {
         res.render("add.twig");
     });
+
+    // PETICION POST
+    app.post('/songs/add', function(req, res){
+        let song = {
+            title: req.body.title,
+            kind: req.body.kind,
+            price: req.body.price
+        }
+        MongoClient.connect(app.get('connectionStrings'), function (err, dbClient) {
+            if (err) {
+                res.send("Error de conexión: " + err);
+            } else {
+                const database = dbClient.db("musicStore");
+                const collectionName = 'songs';
+                const songsCollection = database.collection(collectionName);
+                songsCollection.insertOne(song)
+                    .then(result => res.send("canción añadida id: " + String(result.insertedId)))
+                    .then(() => dbClient.close())
+                    .catch(err => res.send("Error al insertar " + err));
+            }
+        });
+    })
 
     // **** PARAMETROS EN URL CON /VALOR ****
     app.get('/songs/:id', function(req, res) {
@@ -57,11 +60,10 @@ module.exports = function (app) {
         res.send(response);
     });
 
-
-    // PETICION POST
-    app.post('/songs/add', function(req, res){
-        let response = "Canción agregada: " + req.body.title + "<br>" +
-            " género: " + req.body.kind + "<br>" + " precio: " + req.body.price;
-        res.send(response);
-    })
+    app.get('/promo*', function (req, res) {
+        res.send('Respuesta al patrón promo*');
+    });
+    app.get('/pro*ar', function (req, res) {
+        res.send('Respuesta al patrón pro*ar');
+    });
 }
