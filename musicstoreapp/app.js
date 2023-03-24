@@ -5,19 +5,29 @@ var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 
 let app = express();
+
+let expressSession = require('express-session');
+app.use(expressSession({
+  secret: 'abcdefg',
+  resave: true,
+  saveUninitialized: true
+}))
+
+let crypto = require('crypto');
 let fileUpload = require('express-fileupload');
 app.use(fileUpload({
   limits: {fileSize: 50*1024*1024},
   createParentPath: true
 }));
 app.set('uploadPath', __dirname);
+app.set('clave', 'abcdefg');
+app.set('crypto', crypto);
 
 let bodyParser = require('body-parser');
 app.use(bodyParser.json());
 app.use(bodyParser.urlencoded({extended:true}));
 
 let indexRouter = require('./routes');
-let usersRouter = require('./routes/users');
 require("./routes/authors.js")(app); // controlador para autores
 
 const { MongoClient } = require("mongodb"); // para poder acceder a mongo
@@ -26,6 +36,10 @@ app.set('connectionStrings', url); // almacenar cadena de conexion
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 require("./routes/songs.js")(app, songsRepository);
+
+const usersRepository = require("./repositories/usersRepository.js");
+usersRepository.init(app, MongoClient);
+require("./routes/users.js")(app, usersRepository);
 
 // view engine setup: incluido el modulo twig en el fichero app.js
 app.set('views', path.join(__dirname, 'views'));
@@ -39,8 +53,6 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', indexRouter);
-app.use('/users', usersRouter);
-
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
