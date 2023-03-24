@@ -33,6 +33,15 @@ require("./routes/authors.js")(app); // controlador para autores
 const { MongoClient } = require("mongodb"); // para poder acceder a mongo
 const url = 'mongodb+srv://admin:PL0G7I6cEIC1smJC@musicstoreapp.bflh7ay.mongodb.net/?retryWrites=true&w=majority';
 app.set('connectionStrings', url); // almacenar cadena de conexion
+
+const userSessionRouter = require('./routes/userSessionRouter');
+const userAudiosRouter = require('./routes/userAudiosRouter');
+
+app.use("/songs/add",userSessionRouter);
+app.use("/publications",userSessionRouter);
+app.use("/shop/",userSessionRouter);
+app.use("/audios", userAudiosRouter);
+
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 require("./routes/songs.js")(app, songsRepository);
