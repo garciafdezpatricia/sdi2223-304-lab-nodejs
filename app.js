@@ -13,7 +13,8 @@ app.use(bodyParser.urlencoded({extended:true}));
 
 let indexRouter = require('./routes/index');
 let usersRouter = require('./routes/users');
-require("./routes/songs.js")(app);
+require("./routes/songs.js")(app); // controlador para canciones
+require("./routes/authors.js")(app); // controlador para autores
 
 // view engine setup: incluido el modulo twig en el fichero app.js
 app.set('views', path.join(__dirname, 'views'));

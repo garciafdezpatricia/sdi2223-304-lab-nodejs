@@ -1,5 +1,8 @@
 #!/usr/bin/env node
 
+// URL DE CONEXION A MONGODB
+// mongodb+srv://admin:SDIADMIN@musicstoreapp.bflh7ay.mongodb.net/?retryWrites=true&w=majority
+
 /**
  * Module dependencies.
  */
