@@ -1,5 +1,6 @@
-const {ObjectID} = require("mongodb");
-module.exports = function (app, songsRepository) {
+const {ObjectId} = require("mongodb");
+
+module.exports = function (app, songsRepository, commentsRepository) {
 
     // **** PARAMETROS EN URL CON ? CLAVE=VALOR ****
     app.get("/songs", function(req, res) {
@@ -60,6 +61,21 @@ module.exports = function (app, songsRepository) {
                }
            }
         });
+    })
+
+    app.get('/songs/:id', function (req, res) {
+        // let filter = {_id: req.params.id};
+        let filter = {_id: ObjectId(req.params.id)};
+        let options = {};
+        songsRepository.findSong(filter, options).then(song => {
+            let filterComment = {song_id: song._id}
+            commentsRepository.getComments(filterComment, options).then(comments => {
+                res.render("songs/song.twig", {song: song, comments: comments});
+            })
+        }).catch(error => {
+            res.send("Se ha producido un error al buscar la canción " + error)
+        });
+
     })
 
     app.get('/shop', function (req, res){
