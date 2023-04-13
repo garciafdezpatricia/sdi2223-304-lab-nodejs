@@ -36,12 +36,15 @@ app.set('connectionStrings', url); // almacenar cadena de conexion
 
 const userSessionRouter = require('./routes/userSessionRouter');
 const userAudiosRouter = require('./routes/userAudiosRouter');
+const userAuthorRouter = require('./routes/userAuthorRouter')
 
 app.use("/songs/add",userSessionRouter);
 app.use("/publications",userSessionRouter);
 app.use("/shop/",userSessionRouter);
 app.use("/audios", userAudiosRouter);
 app.use("/comments", userSessionRouter);
+app.use("/songs/edit", userAuthorRouter);
+app.use("/songs/delete", userAuthorRouter);
 
 let commentsRepository = require("./repositories/commentsRepository.js");
 commentsRepository.init(app, MongoClient);
