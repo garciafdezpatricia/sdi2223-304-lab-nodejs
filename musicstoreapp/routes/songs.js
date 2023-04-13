@@ -50,7 +50,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
                                    if (err) {
                                        res.send("Error al subir el audio");
                                    } else {
-                                       res.send("Agregada la canción ID: " + songId);
+                                       res.redirect('/publications')
                                    }
                                });
                            }
@@ -103,7 +103,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
     })
 
     app.get('/songs/edit/:id', function(req, res) {
-        let filter = {_id: ObjectID(req.params.id)};
+        let filter = {_id: ObjectId(req.params.id)};
         songsRepository.findSong(filter, {}).then(song => {
             res.render("songs/edit.twig", {song: song});
         }).catch(error => {
@@ -119,7 +119,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
             author: req.session.user
         }
         let songId = req.params.id;
-        let filter = {_id: ObjectID(songId)};
+        let filter = {_id: ObjectId(songId)};
         //que no se cree un documento nuevo si no existe
         const options = {upsert: false}
         songsRepository.updateSong(song, filter, options).then(result => {
@@ -127,7 +127,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
                 if (result == null) {
                     res.send("Error al actualizar la portada o el audio de la canción");
                 } else {
-                    res.send("Se ha modificado el registro correctamente");
+                    res.redirect('/publications')
                 }
             });
         }).catch(error => {
@@ -197,7 +197,7 @@ module.exports = function (app, songsRepository, commentsRepository) {
     };
 
     app.get('/songs/:id', function(req, res){
-       let filter = {_id: ObjectID(req.params.id)};
+       let filter = {_id: ObjectId(req.params.id)};
        let options = {};
 
        songsRepository.findSong(filter, options).then(song => {
