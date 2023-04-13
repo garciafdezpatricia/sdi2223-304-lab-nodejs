@@ -11,7 +11,7 @@
 		 <h2>{{ song.title }}</h2>
 		 <p>{{ song.author }}</p>
 		 <p>{{ song.kind }}</p>
-		 <button type="button" class="btn btn-primary pull-right">{{ song.price }}€</button>
+			<a class="btn btn-primary pull-right" href="/songs/buy/{{ song._id }}">{{ song.price }} €</a>
 		</div>
 	  </div>
 	<form class="form-horizontal" method="post" action="/comments/{{ song._id }}">

@@ -1,5 +1,5 @@
 {% extends "layout.twig" %}
-{% block title %} Mis publicaciones {% endblock %}
+{% block title %} Mis compras {% endblock %}
 
 {% block main_container %}
 <h2>Mis compras</h2>
@@ -15,7 +15,7 @@
 			</tr>
 		</thead>
 		<tbody>
-		{% for song in canciones %}
+		{% for song in songs %}
 			<tr>
 				<td>{{ song.title }}</td>
 				<td>{{ song.kind }}</td>
