@@ -73,11 +73,13 @@ require("./routes/comments.js")(app, commentsRepository)
 let songsRepository = require("./repositories/songsRepository.js");
 songsRepository.init(app, MongoClient);
 require("./routes/songs.js")(app, songsRepository, commentsRepository);
-require("./routes/api/songsAPIv1.0.js")(app, songsRepository);
+
 
 let usersRepository = require("./repositories/usersRepository.js");
 usersRepository.init(app, MongoClient);
 require("./routes/users.js")(app, usersRepository);
+
+// require("./routes/api/songsAPIv1.0.js")(app, songsRepository, usersRepository);
 require("./routes/api/songsAPIv1.0.js")(app, songsRepository, usersRepository);
 
 // view engine setup: incluido el modulo twig en el fichero app.js

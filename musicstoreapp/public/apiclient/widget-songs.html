@@ -6,8 +6,7 @@
 </head>
 <body>
 <div id="widget-songs" >
-  <input type="text" class="form-control" placeholder="Filtrar por nombre" id="filter-by-
-  name"/>
+  <input type="text" class="form-control" placeholder="Filtrar por nombre" id="filter-by-name"/>
   <button class="btn btn-primary" onclick="widgetAddSong()">Nueva Canción</button>
   <button class="btn" onclick="loadSongs()" >Actualizar</button>
   <table class="table table-hover">
@@ -74,8 +73,15 @@
         console.log("Canción eliminada: " + _id);
         $("#" + _id).remove(); // eliminar el <tr> de la canción
       },
-      error: function (error) {
-        $("#main-container").load("widget-login.html");
+      error: function (response) {
+        console.log(response);
+        $("#div-errors").remove();
+        let current_errors = (typeof response.responseJSON.errors == "undefined") ? null : response.responseJSON.errors;
+        if (current_errors != null && current_errors.length > 0){
+          $("#widget-songs").prepend("<div id='div-errors' class='alert alert-danger'>Usuario no autorizado</ul></div>");
+        } else{
+          $("#widget-agregar").prepend("<div id='div-errors' class='alert alert-danger'>Se ha producido un error inesperado</div>")
+        }
       }
     });
   }
@@ -84,6 +90,7 @@
     selectedSongId = _id;
     $("#main-container").load("widget-detail.html");
   }
+
   $('#filter-by-name').on('input',function(e){
     let filteredSongs = [];
     let filterValue = $("#filter-by-name").val();
